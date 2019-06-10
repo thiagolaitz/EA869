@@ -2,8 +2,8 @@
 ; Exercicio_AMI.asm
 ;
 ; Created: 19/05/2019 11:23:23
-; Author : Thiago Soares Laitz     224898
-;	   Gabriel Araújo Pinheiro 216073
+; Author : Thiago Soares Laitz     
+;	   Gabriel Araújo Pinheiro 
 
 .dseg;reserva bytes na memoria de dados
 codigo: .byte 24; colocar um valor P = 8N
