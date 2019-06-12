@@ -2,7 +2,7 @@
 ;
 ; Created: 11/06/2019 08:49:03
 ; Author : Thiago Soares Laitz
-;
+;	   Gabriel Araujo Pinheiro
 .equ parametro = 0x1900 ;0x1900 = 0,1s // 0xFA00 = 1s (6400 / 64000)
 ;utilizamos: R19,R27,R26,R17,R1,r20
 .cseg
