@@ -16,8 +16,8 @@ ldi r20, 24
 
 loop:; esta rotina deve ter exatamente 250 ciclos
 ldi r17,0
-add r17,r27
-add r17,r26;overflow no registrador, preciso mudar
+or r17,r27
+or r17,r26;o único caso positivo é quando r26 = r27 = 0
 cpi r17,0
 breq fim
 nop
