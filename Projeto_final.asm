@@ -22,11 +22,6 @@
 
 reset:;R22 foi usado para carregar o DDRB; pino 0: saída; pino 1: entrada
 
-	ldi r22, 0x00
-	out DDRD, r22; define pino da porta de interrupção como 
-	ldi r22, 0x05 
-	out DDRB, r22
-
 	ldi r27,0xFA ;configurações iniciais para piscar a cada 1s
 	ldi r26,0x00
 	ldi r21, 0
@@ -40,14 +35,18 @@ reset:;R22 foi usado para carregar o DDRB; pino 0: saída; pino 1: entrada
 	ori r16,0x01
 	out EIMSK,r16
 
+	sbi 0x04, 5
+	cbi 0x0b, 2
+
 	;habilita todas as interrupções
 	sei					
 		
 main:;Rotina que deve piscar o LED
-	sbi 0x05, 5
-	call delay
+	
 	cbi 0x05, 5
-	call delay
+	rcall delay
+	sbi 0x05, 5
+	rcall delay
 	rjmp main
 
 parametro:;a ideia é usar um registrador para saber em qual estado ele está, r21 = 0 (1s), r21 = 1 (0,5s), r21 = 2 (0,25s)
@@ -61,22 +60,27 @@ parametro:;a ideia é usar um registrador para saber em qual estado ele está, r
 		ldi r27,0x7D
 		ldi r26,0x00
 		ldi r21, 1
+		;reti
+		sei
 		rjmp main
 	um_quarto:;seta os parametros para um delay de 0,25s e atualiza o registrador auxiliar
 		ldi r27,0x3E
 		ldi r26,0x80
 		ldi r21, 2
+		;reti
+		sei
 		rjmp main
 	um:;seta os parametros para um delay de 1s e atualiza o registrador auxiliar
 		ldi r27,0xFA
 		ldi r26,0x00
 		ldi r21, 0
+		;reti
+		sei
 		rjmp main
 
-delay:
-	;o primeiro passo é configurar o parâmetro com 16 bits; 6400x = 0,1s , 64000x = 1s
-	ldi r27, high(parametro)
-	ldi r26, low(parametro)
+delay:; devo salvar os parametros dos registradores de entrada para ficar num loop infinito
+	push r27
+	push r26
 	ldi r19, 0
 	ldi r20, 24
 
@@ -101,4 +105,6 @@ delay:
 	rjmp loop
 
 	fim:;acrescentar RET para voltar da subrotina no projeto final
+	pop r26
+	pop r27
 	ret
