@@ -8,7 +8,7 @@
 ;programa MAIN: pisca pisca
 
 ;DELAY: 0x1900 = 0,1s // 0xFA00 = 1s // 0x7D00 = 0,5s // 0x3E80 = 0,25s ===> 64000x = 1s
-;utilizamos: R19,R27,R26,R17,R1,r20
+;utilizamos: R19,R27,R26,R17,r16,R1,r20
 
 .cseg
 	;a partir de 0x00, temos o vetor de interrupção
@@ -20,10 +20,16 @@
 	;Fim do vetor de interrupção
 	.org 0x0034		
 
-reset:
+reset:;R22 foi usado para carregar o DDRB; pino 0: saída; pino 1: entrada
+
+	ldi r22, 0x00
+	out DDRD, r22; define pino da porta de interrupção como 
+	ldi r22, 0x05 
+	out DDRB, r22
+
 	ldi r27,0xFA ;configurações iniciais para piscar a cada 1s
 	ldi r26,0x00
-	ldi r2, 0
+	ldi r21, 0
 	; seta os dois bits menos significativos para ativar a interrupção em borda de subida 
 	lds r16,EICRA
 	ori r16,0x03
@@ -37,31 +43,34 @@ reset:
 	;habilita todas as interrupções
 	sei					
 		
-main:;rotina que deve piscar o LED
-	
+main:;Rotina que deve piscar o LED
+	sbi 0x05, 5
+	call delay
+	cbi 0x05, 5
+	call delay
 	rjmp main
 
-parametro:;a ideia é usar um registrador para saber em qual estado ele está, r2 = 0 (1s), r2 = 1 (0,5s), r2 = 2 (0,25s)
-	cpi r2,0
+parametro:;a ideia é usar um registrador para saber em qual estado ele está, r21 = 0 (1s), r21 = 1 (0,5s), r21 = 2 (0,25s)
+	cpi r21,0
 	breq meio
-	cpi r2,1
+	cpi r21,1
 	breq um_quarto
-	cpi r2,2
+	cpi r21,2
 	breq um
 	meio:;seta os parametros para um delay de 0,5s e atualiza o registrador auxiliar
 		ldi r27,0x7D
 		ldi r26,0x00
-		ldi r2, 1
+		ldi r21, 1
 		rjmp main
 	um_quarto:;seta os parametros para um delay de 0,25s e atualiza o registrador auxiliar
 		ldi r27,0x3E
 		ldi r26,0x80
-		ldi r2, 2
+		ldi r21, 2
 		rjmp main
 	um:;seta os parametros para um delay de 1s e atualiza o registrador auxiliar
 		ldi r27,0xFA
 		ldi r26,0x00
-		ldi r2, 0
+		ldi r21, 0
 		rjmp main
 
 delay:
