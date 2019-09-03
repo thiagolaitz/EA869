@@ -1,9 +1,9 @@
 ; Projeto_final.asm
 ;
 ; Created: 15/06/2019 20:01:47
-; Author :  Thiago Soares Laitz - 224898
-;			Gabriel Araujo Pinheiro - 216073			
-;			Gabriel Dante Roque
+; Author :  Thiago Soares Laitz
+;	    Gabriel Araujo Pinheiro 			
+;	    Gabriel Dante Roque
 
 ;programa MAIN: pisca pisca
 
