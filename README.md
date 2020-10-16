@@ -1,5 +1,5 @@
 # EA869
-Assembly projects for ATMEGA328P. UNICAMP (University of Campinas).
+Rotinas em Assembly para o ATMEGA328P. UNICAMP (Universidade de Campinas).
 
 ATMEL STUDIO 7.0 - ATMEGA328p
 
